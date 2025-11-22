@@ -84,9 +84,12 @@ function main_menu()
     println("  7. View Alternatives - Browse FOSS alternatives")
     println("  8. Configuration     - Settings and preferences")
     println("  9. Help/About        - Information and documentation")
+    println()
+    println("  10. Tech Diagnostics - System diagnostics (developers, optional)")
+    println()
     println("  0. Exit              - Quit Juisys")
     println()
-    print("Enter choice [0-9]: ")
+    print("Enter choice [0-10]: ")
 
     input = strip(readline())
 
@@ -96,8 +99,8 @@ function main_menu()
         -1
     end
 
-    if choice < 0 || choice > 9
-        println("⚠️  Invalid choice. Please enter 0-9.")
+    if choice < 0 || choice > 10
+        println("⚠️  Invalid choice. Please enter 0-10.")
         return main_menu()
     end
 
@@ -128,6 +131,8 @@ function handle_menu_choice(choice::Int)
         run_configuration()
     elseif choice == 9
         show_help()
+    elseif choice == 10
+        run_tech_diagnostics()
     end
 end
 
@@ -433,6 +438,119 @@ function show_help()
 
     print("Press Enter to continue...")
     readline()
+end
+
+"""
+    run_tech_diagnostics()
+
+    Run technical system diagnostics (optional add-on).
+"""
+function run_tech_diagnostics()
+    println("\n" * "="^70)
+    println("TECHNICAL DIAGNOSTICS (Developer Add-on)")
+    println("="^70)
+    println()
+
+    println("Technical Diagnostics provides detailed system information")
+    println("for developers and technical users.")
+    println()
+    println("NOTE: This requires the D-based diagnostics library.")
+    println()
+
+    # Try to load diagnostics integration
+    try
+        include("diagnostics_integration.jl")
+        using .DiagnosticsIntegration
+
+        println("Attempting to enable diagnostics...")
+        println()
+
+        if !enable_diagnostics(STANDARD)
+            println("⚠️  Diagnostics library not found or not built.")
+            println()
+            println("To enable technical diagnostics:")
+            println("  1. Install D compiler: brew install ldc")
+            println("  2. Build library: cd src-diagnostics/d && make release")
+            println("  3. Retry this option")
+            println()
+            println("See docs/diagnostics/DIAGNOSTICS.md for details")
+            return
+        end
+
+        println("✓ Diagnostics library loaded")
+        println()
+
+        # Choose level
+        println("Select diagnostic level:")
+        println("  1. BASIC     - Essential info (fast)")
+        println("  2. STANDARD  - Developer diagnostics (recommended)")
+        println("  3. DEEP      - Comprehensive analysis")
+        println("  4. FORENSIC  - Maximum detail (slow)")
+        println()
+        print("Choice [1-4]: ")
+
+        level_choice = strip(readline())
+
+        level = if level_choice == "1"
+            BASIC
+        elseif level_choice == "3"
+            DEEP
+        elseif level_choice == "4"
+            FORENSIC
+        else
+            STANDARD
+        end
+
+        println("\nSelected level: $level")
+        println()
+
+        # Create diagnostics instance
+        diag = SystemDiagnostics(level)
+
+        # Request consent
+        if !request_consent(diag)
+            println("Diagnostics cancelled")
+            return
+        end
+
+        println()
+
+        # Run diagnostics
+        results = run_diagnostics(diag)
+
+        if !isnothing(results)
+            println()
+            report = format_diagnostic_report(results)
+            println(report)
+
+            # Offer export
+            print("\nExport diagnostics report? [y/N]: ")
+            response = lowercase(strip(readline()))
+
+            if response in ["y", "yes"]
+                print("Enter filename: ")
+                filename = strip(readline())
+
+                if !isempty(filename)
+                    export_diagnostics_report(results, filename, format=:json)
+                    println("✓ Exported to: $filename")
+                end
+            end
+
+            # Cleanup
+            clear_diagnostics_data(diag)
+        end
+
+    catch e
+        println("ERROR: Unable to load diagnostics")
+        println("Reason: ", e)
+        println()
+        println("Diagnostics add-on is optional. See:")
+        println("  - docs/diagnostics/DIAGNOSTICS.md")
+        println("  - src-diagnostics/README.md")
+    end
+
+    println()
 end
 
 """

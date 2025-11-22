@@ -16,6 +16,16 @@ Juisys is an educational tool that audits installed applications, classifies the
 ✅ **Self-Auditing** - Tool audits its own code for privacy compliance
 ✅ **Educational** - Demonstrates real-world GDPR implementation
 
+### Optional: Technical Diagnostics Add-on
+
+🔧 **Developer-Focused Extension** (optional, requires D compiler)
+- Comprehensive system diagnostics (hardware, software, network)
+- Similar to SIW (System Information for Windows) but for macOS/Linux
+- Written in D for performance, integrated with Julia core
+- Same privacy guarantees (local only, ephemeral, consent-based)
+- 4 diagnostic levels: BASIC, STANDARD, DEEP, FORENSIC
+- See [docs/diagnostics/DIAGNOSTICS.md](docs/diagnostics/DIAGNOSTICS.md)
+
 ---
 
 ## Quick Start
