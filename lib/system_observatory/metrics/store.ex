@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-defmodule Jusys.Metrics.Store do
+defmodule SystemObservatory.Metrics.Store do
   @moduledoc """
   In-memory metrics store for time series data.
 

@@ -3,7 +3,7 @@
 
 (ecosystem
   (version "1.0")
-  (name "jusys")
+  (name "system-observatory")
   (type "satellite")
   (purpose "Observability layer - metrics, correlation, and forecasting")
 

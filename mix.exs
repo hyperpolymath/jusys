@@ -1,14 +1,14 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-defmodule Jusys.MixProject do
+defmodule SystemObservatory.MixProject do
   use Mix.Project
 
-  @version "1.0.0"
-  @source_url "https://github.com/hyperpolymath/jusys"
+  @version "1.0.2"
+  @source_url "https://github.com/hyperpolymath/system-observatory"
 
   def project do
     [
-      app: :jusys,
+      app: :system_observatory,
       version: @version,
       elixir: "~> 1.16",
       start_permanent: Mix.env() == :prod,
@@ -22,7 +22,7 @@ defmodule Jusys.MixProject do
   def application do
     [
       extra_applications: [:logger],
-      mod: {Jusys.Application, []}
+      mod: {SystemObservatory.Application, []}
     ]
   end
 
@@ -37,7 +37,7 @@ defmodule Jusys.MixProject do
 
   defp package do
     [
-      name: "jusys",
+      name: "system_observatory",
       licenses: ["AGPL-3.0-or-later"],
       links: %{"GitHub" => @source_url}
     ]

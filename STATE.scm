@@ -7,8 +7,8 @@
        (schema-version . "1")
        (created . "2026-01-02T19:45:00+00:00")
        (updated . "2026-01-02T19:45:00+00:00")
-       (project . "JuSys")
-       (repo . "jusys")))
+       (project . "System Observatory")
+       (repo . "system-observatory")))
 
     (current-position
       ((phase . "Phase 0: Bootstrap")

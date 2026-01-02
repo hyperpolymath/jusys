@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-= JuSys (Systems Observatory)
+= System Observatory
 image:https://img.shields.io/badge/License-AGPL--3.0--or--later-blue.svg[AGPL-3.0,link="https://www.gnu.org/licenses/agpl-3.0"]
 image:https://img.shields.io/badge/Philosophy-Palimpsest-6a5acd.svg[Palimpsest,link="https://github.com/hyperpolymath/palimpsest-licence"]
 :toc:
@@ -7,7 +7,7 @@ image:https://img.shields.io/badge/Philosophy-Palimpsest-6a5acd.svg[Palimpsest,l
 :icons: font
 :source-highlighter: rouge
 
-*JuSys* is the observability layer for AmbientOps — metrics store, correlation engine, and forecasting dashboard.
+*System Observatory* is the observability layer for AmbientOps — metrics store, correlation engine, and forecasting dashboard.
 
 [IMPORTANT]
 ====
@@ -19,11 +19,11 @@ Implementation will follow the AmbientOps contract specifications.
 
 == Philosophy
 
-JuSys **observes and recommends**. It never applies changes.
+System Observatory **observes and recommends**. It never applies changes.
 
 [cols="1,1",options="header"]
 |===
-| JuSys | Other tools
+| System Observatory | Other tools
 
 | Observes
 | Acts
@@ -43,7 +43,7 @@ JuSys **observes and recommends**. It never applies changes.
 
 == What it does
 
-JuSys provides:
+System Observatory provides:
 
 * **Metrics store** — time series data from system scans
 * **Dashboard** — SolarWinds-like visualization of system health
@@ -54,7 +54,7 @@ JuSys provides:
 
 ----
                     ┌───────────────────────────────────────┐
-                    │         JuSys (You are here)           │
+                    │         System Observatory (You are here)           │
                     │                                        │
                     │  ┌─────────┐  ┌─────────┐  ┌────────┐ │
                     │  │ Metrics │  │Timeline │  │Forecast│ │
@@ -74,12 +74,12 @@ JuSys provides:
 
 == Interface with Operating Theatre
 
-JuSys interfaces with Operating Theatre (big-up) via run bundles:
+System Observatory interfaces with Operating Theatre (big-up) via run bundles:
 
-* **Input**: Operating Theatre → JuSys: run bundles (snapshot/findings/plan/applied)
-* **Output**: JuSys → Operating Theatre: current state, alerts, forecasts, recommended plan templates
+* **Input**: Operating Theatre → System Observatory: run bundles (snapshot/findings/plan/applied)
+* **Output**: System Observatory → Operating Theatre: current state, alerts, forecasts, recommended plan templates
 
-JuSys **never applies changes**. It only provides recommendations.
+System Observatory **never applies changes**. It only provides recommendations.
 
 == Planned capabilities
 
@@ -120,7 +120,7 @@ Per AmbientOps language policy:
 
 [IMPORTANT]
 ====
-JuSys is *observability only*. It MUST NOT become:
+System Observatory is *observability only*. It MUST NOT become:
 
 * Policy engine
 * IR authority
@@ -133,19 +133,19 @@ JuSys is *observability only*. It MUST NOT become:
 [source,bash]
 ----
 # Check current state
-jusys status
+sysobs status
 
 # Ingest a run bundle from Operating Theatre
-jusys ingest /path/to/run-bundle/
+sysobs ingest /path/to/run-bundle/
 
 # Get recommendations
-jusys recommend
+sysobs recommend
 
 # Start dashboard
-jusys dashboard
+sysobs dashboard
 
 # Query metrics
-jusys query "disk.usage" --since "7d"
+sysobs query "disk.usage" --since "7d"
 ----
 
 == Ecosystem Analysis

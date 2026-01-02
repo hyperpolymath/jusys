@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-defmodule Jusys.Correlator do
+defmodule SystemObservatory.Correlator do
   @moduledoc """
   Event correlator for change timeline.
 

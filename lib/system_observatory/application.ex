@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-defmodule Jusys.Application do
+defmodule SystemObservatory.Application do
   @moduledoc """
   JuSys Application supervisor.
 
@@ -13,12 +13,12 @@ defmodule Jusys.Application do
   def start(_type, _args) do
     children = [
       # Start the metrics store
-      Jusys.Metrics.Store,
+      SystemObservatory.Metrics.Store,
       # Start the event correlator
-      Jusys.Correlator
+      SystemObservatory.Correlator
     ]
 
-    opts = [strategy: :one_for_one, name: Jusys.Supervisor]
+    opts = [strategy: :one_for_one, name: SystemObservatory.Supervisor]
     Supervisor.start_link(children, opts)
   end
 end
