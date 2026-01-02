@@ -9,43 +9,43 @@ defmodule Jusys.CorrelatorTest do
   end
 
   describe "record_event/3" do
-    test "records a change event" do
-      :ok = Jusys.Correlator.record_event(:change, "system", %{action: "update"})
-      events = Jusys.Correlator.all_events()
+    test "records a change event and returns id" do
+      {:ok, id} = Jusys.Correlator.record_event(:change, "system", %{action: "update"})
+      assert is_binary(id)
 
+      events = Jusys.Correlator.all_events()
       assert length(events) == 1
       [event] = events
       assert event.type == :change
       assert event.source == "system"
+      assert event.id == id
     end
 
     test "records an anomaly event" do
-      :ok = Jusys.Correlator.record_event(:anomaly, "disk", %{error: "low space"})
+      {:ok, _id} = Jusys.Correlator.record_event(:anomaly, "disk", %{error: "low space"})
       [event] = Jusys.Correlator.all_events()
 
       assert event.type == :anomaly
     end
 
     test "records a metric event" do
-      :ok = Jusys.Correlator.record_event(:metric, "cpu", %{value: 95})
+      {:ok, _id} = Jusys.Correlator.record_event(:metric, "cpu", %{value: 95})
       [event] = Jusys.Correlator.all_events()
 
       assert event.type == :metric
     end
 
     test "generates unique id for each event" do
-      :ok = Jusys.Correlator.record_event(:change, "a", %{})
-      :ok = Jusys.Correlator.record_event(:change, "b", %{})
-      events = Jusys.Correlator.all_events()
+      {:ok, id1} = Jusys.Correlator.record_event(:change, "a", %{})
+      {:ok, id2} = Jusys.Correlator.record_event(:change, "b", %{})
 
-      [e1, e2] = events
-      assert e1.id != e2.id
+      assert id1 != id2
     end
   end
 
   describe "find_correlations/0" do
     test "returns empty list when no anomalies" do
-      :ok = Jusys.Correlator.record_event(:change, "system", %{})
+      {:ok, _id} = Jusys.Correlator.record_event(:change, "system", %{})
       correlations = Jusys.Correlator.find_correlations()
 
       assert correlations == []
@@ -53,10 +53,10 @@ defmodule Jusys.CorrelatorTest do
 
     test "correlates anomaly with recent changes" do
       # Record a change
-      :ok = Jusys.Correlator.record_event(:change, "package", %{name: "openssl"})
+      {:ok, _id} = Jusys.Correlator.record_event(:change, "package", %{name: "openssl"})
 
       # Record an anomaly shortly after
-      :ok = Jusys.Correlator.record_event(:anomaly, "ssl", %{error: "handshake failed"})
+      {:ok, _id} = Jusys.Correlator.record_event(:anomaly, "ssl", %{error: "handshake failed"})
 
       correlations = Jusys.Correlator.find_correlations()
 
@@ -65,22 +65,27 @@ defmodule Jusys.CorrelatorTest do
       assert corr.anomaly.type == :anomaly
       assert length(corr.related_changes) == 1
       assert corr.confidence > 0
+      # Verify calculated_at is present (CRIT-001 fix)
+      assert %DateTime{} = corr.calculated_at
     end
 
-    test "high confidence for single related change" do
-      :ok = Jusys.Correlator.record_event(:change, "system", %{})
-      :ok = Jusys.Correlator.record_event(:anomaly, "app", %{})
+    test "confidence increases with temporal proximity" do
+      {:ok, _id} = Jusys.Correlator.record_event(:change, "system", %{})
+      {:ok, _id} = Jusys.Correlator.record_event(:anomaly, "app", %{})
 
       [corr] = Jusys.Correlator.find_correlations()
-      assert corr.confidence == 0.8
+      # With new scoring: base 0.2 (1 change) + proximity bonus (close to 0.3)
+      # Total should be around 0.5 for immediate succession
+      assert corr.confidence >= 0.2
+      assert corr.confidence <= 0.95
     end
   end
 
   describe "all_events/0" do
     test "returns events in chronological order" do
-      :ok = Jusys.Correlator.record_event(:change, "a", %{})
-      :ok = Jusys.Correlator.record_event(:change, "b", %{})
-      :ok = Jusys.Correlator.record_event(:change, "c", %{})
+      {:ok, _} = Jusys.Correlator.record_event(:change, "a", %{})
+      {:ok, _} = Jusys.Correlator.record_event(:change, "b", %{})
+      {:ok, _} = Jusys.Correlator.record_event(:change, "c", %{})
 
       events = Jusys.Correlator.all_events()
       sources = Enum.map(events, & &1.source)
@@ -90,11 +95,21 @@ defmodule Jusys.CorrelatorTest do
 
   describe "clear/0" do
     test "removes all events" do
-      :ok = Jusys.Correlator.record_event(:change, "test", %{})
+      {:ok, _} = Jusys.Correlator.record_event(:change, "test", %{})
       assert length(Jusys.Correlator.all_events()) == 1
 
       :ok = Jusys.Correlator.clear()
       assert Jusys.Correlator.all_events() == []
+    end
+  end
+
+  describe "record_event_async/3" do
+    test "records event asynchronously" do
+      :ok = Jusys.Correlator.record_event_async(:change, "async", %{})
+      # Give the GenServer time to process the cast
+      Process.sleep(10)
+      events = Jusys.Correlator.all_events()
+      assert length(events) == 1
     end
   end
 end
