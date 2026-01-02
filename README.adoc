@@ -148,6 +148,19 @@ jusys dashboard
 jusys query "disk.usage" --since "7d"
 ----
 
+== Ecosystem Analysis
+
+For a comprehensive analysis of integration seams, failure modes, and security considerations across the entire AmbientOps System Tools ecosystem, see:
+
+link:https://github.com/hyperpolymath/system-operating-theatre/blob/main/docs/SEAM-ANALYSIS.adoc[SEAM-ANALYSIS.adoc] in system-operating-theatre
+
+This analysis covers:
+
+* GenServer race condition mitigation
+* Confidence scoring correctness
+* O(n²) correlation optimization
+* "Never source of truth" principle enforcement
+
 == License
 
 AGPL-3.0-or-later.
