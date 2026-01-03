@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-= JuSys Roadmap
+= System Observatory Roadmap
 :toc:
 :toclevels: 3
 :icons: font
 
-Development roadmap for JuSys: the observability layer for AmbientOps.
+Development roadmap for System Observatory: the observability layer for AmbientOps.
 
 == Phase 0 — Bootstrap (current)
 
@@ -32,7 +32,7 @@ Deliverables:
 * Metrics store (time series)
 * Run bundle ingestion from Operating Theatre
 * Basic correlation (anomaly ↔ recent change)
-* CLI: `jusys status`, `jusys ingest`, `jusys query`
+* CLI: `sysobs status`, `sysobs ingest`, `sysobs query`
 
 == Phase 3 — Dashboard
 
@@ -86,7 +86,7 @@ Deliverables:
 
 == Constraints
 
-JuSys MUST:
+System Observatory MUST:
 
 * Only observe, never mutate
 * Only recommend, never apply

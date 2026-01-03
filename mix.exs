@@ -3,7 +3,7 @@
 defmodule SystemObservatory.MixProject do
   use Mix.Project
 
-  @version "1.0.2"
+  @version "1.1.0"
   @source_url "https://github.com/hyperpolymath/system-observatory"
 
   def project do

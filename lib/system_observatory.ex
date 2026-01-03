@@ -2,13 +2,11 @@
 
 defmodule SystemObservatory do
   @moduledoc """
-  JuSys - Systems Observatory
-
-  Observability layer for AmbientOps.
+  System Observatory - Observability layer for AmbientOps.
 
   ## Philosophy
 
-  JuSys **observes and recommends**. It never applies changes.
+  System Observatory **observes and recommends**. It never applies changes.
 
   - Observes (never acts)
   - Correlates (never executes)
@@ -24,25 +22,25 @@ defmodule SystemObservatory do
   * **Forecasting** — predict resource exhaustion
   """
 
-  @version "1.0.0"
+  @version "1.1.0"
   @schema_version "1.0"
 
   @doc """
-  Returns the current version of JuSys.
+  Returns the current version of System Observatory.
   """
   @spec version() :: String.t()
   def version, do: @version
 
   @doc """
-  Returns the schema version for JuSys data formats.
+  Returns the schema version for System Observatory data formats.
   """
   @spec schema_version() :: String.t()
   def schema_version, do: @schema_version
 
   @doc """
-  Check if JuSys is in observation-only mode (always true).
+  Check if System Observatory is in observation-only mode (always true).
 
-  JuSys never modifies system state - it only observes.
+  System Observatory never modifies system state - it only observes.
   """
   @spec observation_only?() :: true
   def observation_only?, do: true

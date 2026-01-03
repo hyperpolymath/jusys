@@ -6,7 +6,7 @@ defmodule SystemObservatoryTest do
 
   describe "version/0" do
     test "returns version string" do
-      assert SystemObservatory.version() == "1.0.0"
+      assert SystemObservatory.version() == "1.1.0"
     end
   end
 
@@ -21,8 +21,8 @@ defmodule SystemObservatoryTest do
       assert SystemObservatory.observation_only?() == true
     end
 
-    test "confirms JuSys never modifies state" do
-      # This is a philosophical test - JuSys only observes
+    test "confirms System Observatory never modifies state" do
+      # This is a philosophical test - System Observatory only observes
       assert SystemObservatory.observation_only?()
     end
   end
