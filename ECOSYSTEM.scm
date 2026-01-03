@@ -32,7 +32,11 @@
 
     (satellite "feedback-o-tron"
       (relationship "integrates")
-      (description "User feedback correlates with system anomalies")))
+      (description "User feedback correlates with system anomalies"))
+
+    (satellite "personal-sysadmin"
+      (relationship "ingests")
+      (description "Ingests PSA diagnostics and health metrics")))
 
   (related-projects
     (project "ambientops"
